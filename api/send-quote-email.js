@@ -23,8 +23,13 @@ module.exports = async (req, res) => {
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'Missing RESEND_API_KEY' });
+    console.error('[API] Missing RESEND_API_KEY');
+    return res.status(500).json({ error: 'Missing RESEND_API_KEY in environment variables.' });
   }
+
+  // Use Resend's default sender for free tier
+  const fromAddress = 'onboarding@resend.dev';
+  const toAddress = 'rsushant583@gmail.com';
 
   const emailBody = `
 New Quote Request Received!
@@ -56,8 +61,8 @@ Please respond to the client within 24 hours.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'onboarding@resend.dev',
-        to: 'rsushant583@gmail.com',
+        from: fromAddress,
+        to: toAddress,
         subject: `New Quote Request - ${package_name}`,
         text: emailBody,
       }),
@@ -65,7 +70,8 @@ Please respond to the client within 24 hours.
 
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.error || 'Failed to send email');
+      console.error('[API] Resend API error:', data);
+      return res.status(500).json({ error: 'Failed to send email', resendError: data });
     }
 
     return res.status(200).json({ message: 'Email sent successfully', data });
