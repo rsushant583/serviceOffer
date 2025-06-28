@@ -1,19 +1,6 @@
-const nodemailer = require('nodemailer');
-// Load environment variables from .env in local development
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+const fetch = require('node-fetch');
 
 console.log('[API] send-quote-email loaded');
-
-// Configure transporter with Gmail credentials from environment variables
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
 
 module.exports = async (req, res) => {
   console.log('[API] send-quote-email called');
@@ -34,17 +21,54 @@ module.exports = async (req, res) => {
     additional_cost,
   } = req.body;
 
-  const mailOptions = {
-    from: process.env.GMAIL_USER,
-    to: process.env.GMAIL_USER,
-    subject: `New Quote Request - ${package_name}`,
-    text: `New Quote Request Received!\n\nCLIENT INFORMATION:\n- Name: ${client_name}\n- Email: ${client_email}\n- Phone: ${client_phone}\n\nPACKAGE DETAILS:\n- Selected Package: ${package_name}\n- Package ID: ${selected_package}\n- Domain & Hosting Package: ${domain_hosting_added ? 'YES (+₹10,500)' : 'NO'}\n- Additional Cost: ${additional_cost}\n\nPROJECT DETAILS:\n${project_details || 'No additional details provided'}\n\nSUBMISSION TIME: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'medium' })}\n\nPlease respond to the client within 24 hours.`,
-  };
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'Missing RESEND_API_KEY' });
+  }
+
+  const emailBody = `
+New Quote Request Received!
+
+CLIENT INFORMATION:
+- Name: ${client_name}
+- Email: ${client_email}
+- Phone: ${client_phone}
+
+PACKAGE DETAILS:
+- Selected Package: ${package_name}
+- Package ID: ${selected_package}
+- Domain & Hosting Package: ${domain_hosting_added ? 'YES (+₹10,500)' : 'NO'}
+- Additional Cost: ${additional_cost}
+
+PROJECT DETAILS:
+${project_details || 'No additional details provided'}
+
+SUBMISSION TIME: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'medium' })}
+
+Please respond to the client within 24 hours.
+`;
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('[API] Email sent:', info);
-    return res.status(200).json({ message: 'Email sent successfully', info });
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'onboarding@resend.dev',
+        to: 'rsushant583@gmail.com',
+        subject: `New Quote Request - ${package_name}`,
+        text: emailBody,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to send email');
+    }
+
+    return res.status(200).json({ message: 'Email sent successfully', data });
   } catch (error) {
     console.error('[API] Error sending email:', error);
     return res.status(500).json({ error: 'Failed to send email', details: error.toString() });

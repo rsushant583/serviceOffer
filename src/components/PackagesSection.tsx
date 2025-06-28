@@ -8,12 +8,10 @@ const packages = [
     tagline: "Perfect Entry Point",
     delivery: "3-4 days",
     features: [
-      "Responsive Landing Page (5 pages)",
+      "Responsive Landing Page",
       "Contact Form integration",
-      "Basic SEO optimization",
       "Mobile Optimized design",
-      "Free hosting setup (Vercel/Render)",
-      "Professional design & branding"
+      "Professional design"
     ],
     popular: false
   },
@@ -25,14 +23,12 @@ const packages = [
     delivery: "6-8 days",
     features: [
       "Full website with user login",
-      "MongoDB database integration",
-      "Admin panel for content management",
-      "Email notifications system",
-      "Free hosting + domain setup",
+      "Authentication system",
+      "Simple Database",
       "Mobile responsive design",
       "Contact form with validation"
     ],
-    popular: true
+    popular: false
   },
   {
     id: "professional",
@@ -42,13 +38,12 @@ const packages = [
     delivery: "10-12 days",
     features: [
       "Advanced authentication system",
-      "API integrations (2-3 services)",
+      "API integrations (1-2 services)",
       "Complex database relationships",
-      "Dashboard with analytics",
       "Performance optimization",
-      "Custom admin panel",
+      "Simple admin panel",
       "Email notification system",
-      "SEO optimization"
+      "Basic SEO optimization"
     ],
     popular: false
   },
@@ -61,14 +56,11 @@ const packages = [
     features: [
       "Complete e-commerce platform",
       "Razorpay payment integration",
-      "Product management system",
-      "Order tracking functionality",
-      "Customer dashboard",
-      "Basic inventory management",
+       "Customer dashboard",
       "Shopping cart & checkout",
       "Admin panel for orders"
     ],
-    popular: false
+    popular: true
   },
   {
     id: "premium",
