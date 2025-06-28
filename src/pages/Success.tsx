@@ -43,7 +43,7 @@ export const Success = () => {
               </Button>
               
               <Button
-                onClick={() => window.open('https://wa.me/1234567890', '_blank')}
+                onClick={() => window.open('https://wa.me/+918005652369', '_blank')}
                 className="flex-1 bg-green-600 hover:bg-green-700 text-white"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
