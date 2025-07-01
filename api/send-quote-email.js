@@ -19,6 +19,7 @@ export default async function handler(req, res) {
     project_details,
     domain_hosting_added,
     additional_cost,
+    automation_plan,
   } = req.body;
 
   const apiKey = process.env.RESEND_API_KEY;
@@ -44,6 +45,7 @@ PACKAGE DETAILS:
 - Package ID: ${selected_package}
 - Domain & Hosting Package: ${domain_hosting_added ? 'YES (+₹10,500)' : 'NO'}
 - Additional Cost: ${additional_cost}
+- Automation Plan: ${automation_plan || 'None'}
 
 PROJECT DETAILS:
 ${project_details || 'No additional details provided'}

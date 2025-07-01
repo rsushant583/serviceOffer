@@ -34,10 +34,11 @@ export const Quote = () => {
     phone: '',
     message: '',
     package: selectedPackage,
-    addDomainHosting: false
+    addDomainHosting: false,
+    automationPlan: '',
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -86,6 +87,7 @@ export const Quote = () => {
           project_details: formData.message,
           domain_hosting_added: formData.addDomainHosting,
           additional_cost: formData.addDomainHosting ? '₹10,500' : '₹0',
+          automation_plan: formData.automationPlan,
         })
       });
 
@@ -205,6 +207,23 @@ export const Quote = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="automationPlan">Automation Plan (for ₹30k+ packages)</Label>
+                <select
+                  id="automationPlan"
+                  name="automationPlan"
+                  value={formData.automationPlan}
+                  onChange={handleInputChange}
+                  className="bg-white/50 border-white/20 focus:bg-white w-full rounded-md p-2"
+                >
+                  <option value="">None</option>
+                  <option value="Basic Automation">🔹 Basic Automation (₹4,999/month)</option>
+                  <option value="Advanced Automation">🔸 Advanced Automation (₹6,999/month)</option>
+                  <option value="Enterprise AI Automation">🟣 Enterprise AI Automation (₹8,999–₹14,999/month)</option>
+                </select>
+                <p className="text-xs text-gray-500">Automation plans are only available for packages above ₹30,000.</p>
               </div>
               
               <Button
