@@ -12,7 +12,7 @@ export const Footer = () => {
         
         <div className="border-t border-gray-800 pt-8">
           <p className="text-gray-400 text-sm">
-            © 2024 Professional Web Development Services. All rights reserved.
+            © 2025 Professional Web Development Services. Made with 💗 By Sushant Rai. All rights reserved.
           </p>
         </div>
       </div>

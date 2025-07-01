@@ -1,14 +1,7 @@
-import fetch from 'node-fetch';
-
-console.log('[API] send-quote-email loaded');
-
 export default async function handler(req, res) {
-  console.log('[API] send-quote-email called');
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
-  console.log('[API] Request body:', req.body);
 
   const {
     client_name,
@@ -81,4 +74,4 @@ Please respond to the client within 24 hours.
     console.error('[API] Error sending email:', error);
     return res.status(500).json({ error: 'Failed to send email', details: error.toString() });
   }
-} 
+}
